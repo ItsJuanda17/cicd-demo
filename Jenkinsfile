@@ -22,14 +22,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
 
         stage('Test') {
             steps {
-                sh './mvnw -B test'
+                sh 'mvn -B test'
             }
             post {
                 always {
@@ -47,7 +46,7 @@ pipeline {
         stage('Static Analysis (SonarQube)') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh "./mvnw -B sonar:sonar -Dsonar.projectKey=${SONAR_KEY} -Dsonar.host.url=${SONAR_HOST}"
+                    sh "mvn -B sonar:sonar -Dsonar.projectKey=${SONAR_KEY} -Dsonar.host.url=${SONAR_HOST}"
                 }
             }
         }
@@ -88,7 +87,7 @@ pipeline {
         }
         always {
             echo 'Limpiando workspace...'
-            cleanWs()
+            deleteDir()
         }
     }
 }
