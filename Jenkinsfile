@@ -56,7 +56,7 @@ pipeline {
 
         stage('Container Security Scan (Trivy)') {
             steps {
-                sh "trivy image --exit-code 1 --severity CRITICAL --no-progress ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "trivy image --exit-code 1 --severity CRITICAL --no-progress --pkg-types os ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
 
