@@ -30,11 +30,6 @@ pipeline {
             steps {
                 sh 'mvn -B test'
             }
-            post {
-                always {
-                    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
-                }
-            }
         }
 
         stage('Docker Build') {
