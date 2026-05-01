@@ -1,0 +1,671 @@
+Started by an SCM change
+Obtained Jenkinsfile from git https://github.com/ItsJuanda17/cicd-demo.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/cicd-demo
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ItsJuanda17/cicd-demo.git
+ > git init /var/jenkins_home/workspace/cicd-demo # timeout=10
+Fetching upstream changes from https://github.com/ItsJuanda17/cicd-demo.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ItsJuanda17/cicd-demo.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ItsJuanda17/cicd-demo.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 06c185bd5c20fad98837d80cf74f5425278a0b27 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 06c185bd5c20fad98837d80cf74f5425278a0b27 # timeout=10
+Commit message: "fix: use eclipse-temurin:21-jre-alpine (openjdk:12-alpine was removed from Docker Hub)"
+ > git rev-list --no-walk 9cf3f1251be77b3da9d097fab29ceffb38ebf79e # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/cicd-demo/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ItsJuanda17/cicd-demo.git # timeout=10
+Fetching upstream changes from https://github.com/ItsJuanda17/cicd-demo.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ItsJuanda17/cicd-demo.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+Checking out Revision 06c185bd5c20fad98837d80cf74f5425278a0b27 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 06c185bd5c20fad98837d80cf74f5425278a0b27 # timeout=10
+Commit message: "fix: use eclipse-temurin:21-jre-alpine (openjdk:12-alpine was removed from Docker Hub)"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ mvn -B -DskipTests clean package
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< au.com.helderklemp:cicd-demo >--------------------
+[INFO] Building cicd-demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.1.0:clean (default-clean) @ cicd-demo ---
+[INFO] Deleting /var/jenkins_home/workspace/cicd-demo/target
+[INFO] 
+[INFO] --- jacoco:0.8.11:prepare-agent (default-prepare-agent) @ cicd-demo ---
+[INFO] argLine set to -javaagent:/var/jenkins_home/.m2/repository/org/jacoco/org.jacoco.agent/0.8.11/org.jacoco.agent-0.8.11-runtime.jar=destfile=/var/jenkins_home/workspace/cicd-demo/target/jacoco.exec
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ cicd-demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- compiler:3.8.0:compile (default-compile) @ cicd-demo ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 8 source files to /var/jenkins_home/workspace/cicd-demo/target/classes
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ cicd-demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/cicd-demo/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.8.0:testCompile (default-testCompile) @ cicd-demo ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 7 source files to /var/jenkins_home/workspace/cicd-demo/target/test-classes
+[INFO] /var/jenkins_home/workspace/cicd-demo/src/test/java/au/com/equifax/cicddemo/SeleniumExampleTest.java: /var/jenkins_home/workspace/cicd-demo/src/test/java/au/com/equifax/cicddemo/SeleniumExampleTest.java uses or overrides a deprecated API.
+[INFO] /var/jenkins_home/workspace/cicd-demo/src/test/java/au/com/equifax/cicddemo/SeleniumExampleTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ cicd-demo ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jacoco:0.8.11:report (default-report) @ cicd-demo ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jar:3.1.0:jar (default-jar) @ cicd-demo ---
+[INFO] Building jar: /var/jenkins_home/workspace/cicd-demo/target/cicd-demo-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:2.0.4.RELEASE:repackage (repackage) @ cicd-demo ---
+[INFO] 
+[INFO] --- spring-boot:2.0.4.RELEASE:repackage (default) @ cicd-demo ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.752 s
+[INFO] Finished at: 2026-05-01T04:00:14Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
++ mvn -B test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< au.com.helderklemp:cicd-demo >--------------------
+[INFO] Building cicd-demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jacoco:0.8.11:prepare-agent (default-prepare-agent) @ cicd-demo ---
+[INFO] argLine set to -javaagent:/var/jenkins_home/.m2/repository/org/jacoco/org.jacoco.agent/0.8.11/org.jacoco.agent-0.8.11-runtime.jar=destfile=/var/jenkins_home/workspace/cicd-demo/target/jacoco.exec
+[INFO] 
+[INFO] --- resources:3.1.0:resources (default-resources) @ cicd-demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- compiler:3.8.0:compile (default-compile) @ cicd-demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.1.0:testResources (default-testResources) @ cicd-demo ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /var/jenkins_home/workspace/cicd-demo/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.8.0:testCompile (default-testCompile) @ cicd-demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ cicd-demo ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running au.com.equifax.cicddemo.CicdDemoApplicationTests
+04:00:18.147 [main] DEBUG org.springframework.test.context.junit4.SpringJUnit4ClassRunner - SpringJUnit4ClassRunner constructor called with [class au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.154 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+04:00:18.170 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+04:00:18.198 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+04:00:18.213 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests], using SpringBootContextLoader
+04:00:18.218 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]: class path resource [au/com/equifax/cicddemo/CicdDemoApplicationTests-context.xml] does not exist
+04:00:18.219 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]: class path resource [au/com/equifax/cicddemo/CicdDemoApplicationTestsContext.groovy] does not exist
+04:00:18.219 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+04:00:18.220 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]: CicdDemoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+04:00:18.277 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.488 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [/var/jenkins_home/workspace/cicd-demo/target/classes/au/com/equifax/cicddemo/CicdDemoApplication.class]
+04:00:18.490 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration au.com.equifax.cicddemo.CicdDemoApplication for test class au.com.equifax.cicddemo.CicdDemoApplicationTests
+04:00:18.630 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [au.com.equifax.cicddemo.CicdDemoApplicationTests]: using defaults.
+04:00:18.631 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+04:00:18.657 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@17b6d426, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@5580d62f, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@16872c4d, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@671facee, org.springframework.test.context.support.DirtiesContextTestExecutionListener@46a953cf, org.springframework.test.context.transaction.TransactionalTestExecutionListener@154bd49b, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@3a01773b, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@20e3c449, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@2c58dcb1, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@67fc2aad, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@56f521c6, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@680a66dd]
+04:00:18.659 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.659 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.661 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.661 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.662 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.663 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.756 [main] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@46c3a14d testClass = CicdDemoApplicationTests, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@38fc5554 testClass = CicdDemoApplicationTests, locations = '{}', classes = '{class au.com.equifax.cicddemo.CicdDemoApplication}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@5aa360ea, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@79ab3a71, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@5bbbdd4b, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@14c053c6], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -> true]], class annotated with @DirtiesContext [false] with mode [null].
+04:00:18.757 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.758 [main] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [au.com.equifax.cicddemo.CicdDemoApplicationTests]
+04:00:18.780 [main] DEBUG org.springframework.test.context.support.TestPropertySourceUtils - Adding inlined properties to environment: {spring.jmx.enabled=false, org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true, server.port=-1}
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.1.RELEASE)
+
+2026-05-01 04:00:19.046  INFO 3956 --- [           main] a.c.e.cicddemo.CicdDemoApplicationTests  : Starting CicdDemoApplicationTests on 1cc346e4a84b with PID 3956 (started by jenkins in /var/jenkins_home/workspace/cicd-demo)
+2026-05-01 04:00:19.049  INFO 3956 --- [           main] a.c.e.cicddemo.CicdDemoApplicationTests  : No active profile set, falling back to default profiles: default
+2026-05-01 04:00:20.435  INFO 3956 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$27aa44b7] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-05-01 04:00:21.348  INFO 3956 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2026-05-01 04:00:21.940  INFO 3956 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-05-01 04:00:21.978  INFO 3956 --- [           main] a.c.e.cicddemo.CicdDemoApplicationTests  : Started CicdDemoApplicationTests in 3.183 seconds (JVM running for 4.864)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.489 s -- in au.com.equifax.cicddemo.CicdDemoApplicationTests
+[INFO] Running au.com.equifax.cicddemo.UserControllerIntTest
+2026-05-01 04:00:22.257  INFO 3956 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [au.com.equifax.cicddemo.UserControllerIntTest], using SpringBootContextLoader
+2026-05-01 04:00:22.258  INFO 3956 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [au.com.equifax.cicddemo.UserControllerIntTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2026-05-01 04:00:22.260  INFO 3956 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+2026-05-01 04:00:22.261  INFO 3956 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@5f36ba0f, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@70c741be, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@611d867, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5efb7f82, org.springframework.test.context.support.DirtiesContextTestExecutionListener@34775090, org.springframework.test.context.transaction.TransactionalTestExecutionListener@7e772d11, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@76ad0058, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@732f7660, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@7d525b45, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@3a0afe5b, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@243b8682, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@2caf6813]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.1.RELEASE)
+
+2026-05-01 04:00:22.515  INFO 3956 --- [           main] a.c.e.cicddemo.UserControllerIntTest     : Starting UserControllerIntTest on 1cc346e4a84b with PID 3956 (started by jenkins in /var/jenkins_home/workspace/cicd-demo)
+2026-05-01 04:00:22.516  INFO 3956 --- [           main] a.c.e.cicddemo.UserControllerIntTest     : No active profile set, falling back to default profiles: default
+2026-05-01 04:00:22.731  INFO 3956 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$27aa44b7] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2026-05-01 04:00:22.952  INFO 3956 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 0 (http)
+2026-05-01 04:00:22.982  INFO 3956 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-01 04:00:22.983  INFO 3956 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/9.0.13
+2026-05-01 04:00:22.993  INFO 3956 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib]
+2026-05-01 04:00:23.086  INFO 3956 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-01 04:00:23.087  INFO 3956 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 570 ms
+2026-05-01 04:00:23.394  INFO 3956 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2026-05-01 04:00:23.521  INFO 3956 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-05-01 04:00:23.581  INFO 3956 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 43881 (http) with context path ''
+2026-05-01 04:00:23.583  INFO 3956 --- [           main] a.c.e.cicddemo.UserControllerIntTest     : Started UserControllerIntTest in 1.081 seconds (JVM running for 6.468)
+2026-05-01 04:00:23.708  INFO 3956 --- [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-01 04:00:23.708  INFO 3956 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-01 04:00:23.717  INFO 3956 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.666 s -- in au.com.equifax.cicddemo.UserControllerIntTest
+[INFO] Running au.com.equifax.cicddemo.UserServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s -- in au.com.equifax.cicddemo.UserServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.554 s
+[INFO] Finished at: 2026-05-01T04:00:24Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+[Pipeline] sh
++ docker build -t mi-app:latest .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 208B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre-alpine
+#2 DONE 3.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/2] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ad0cdd9782db550ca7dde6939a16fd850d04e683d37d3cff79d84a5848ba6a5a
+#4 resolve docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ad0cdd9782db550ca7dde6939a16fd850d04e683d37d3cff79d84a5848ba6a5a 0.0s done
+#4 sha256:7659027a798a9c8fca5bfcbae2d24bd6b7ec65dfe5285d4b7c30c75ca0965299 0B / 128B 0.2s
+#4 sha256:48e51247e7df3167f00ff9972116a308eb551b96eac8382fbf88e82d5866971c 0B / 2.28kB 0.2s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 0B / 53.17MB 0.2s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 0B / 16.84MB 0.2s
+#4 sha256:7659027a798a9c8fca5bfcbae2d24bd6b7ec65dfe5285d4b7c30c75ca0965299 128B / 128B 0.6s done
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 0B / 3.86MB 0.2s
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 20.36MB 1.0s done
+#5 DONE 1.0s
+
+#4 [1/2] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ad0cdd9782db550ca7dde6939a16fd850d04e683d37d3cff79d84a5848ba6a5a
+#4 sha256:48e51247e7df3167f00ff9972116a308eb551b96eac8382fbf88e82d5866971c 2.28kB / 2.28kB 0.9s done
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 1.05MB / 16.84MB 2.7s
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 1.05MB / 3.86MB 2.4s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 2.10MB / 16.84MB 3.0s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 3.15MB / 16.84MB 3.2s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 4.19MB / 16.84MB 3.3s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 5.24MB / 16.84MB 3.5s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 6.29MB / 16.84MB 3.8s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 8.39MB / 16.84MB 3.9s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 9.44MB / 16.84MB 4.1s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 3.15MB / 53.17MB 4.5s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 11.53MB / 16.84MB 4.5s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 12.58MB / 16.84MB 4.7s
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 2.10MB / 3.86MB 4.2s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 13.63MB / 16.84MB 4.8s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 14.68MB / 16.84MB 5.0s
+#4 sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 16.84MB / 16.84MB 5.2s done
+#4 sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 3.15MB / 3.86MB 5.1s
+#4 extracting sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb
+#4 extracting sha256:6a0ac1617861a677b045b7ff88545213ec31c0ff08763195a70a4a5adda577bb 0.2s done
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 6.29MB / 53.17MB 6.6s
+#4 extracting sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe
+#4 extracting sha256:775c53a23a895a8fdcb2534de50a64b420d676e982f81a1e72e88f6b283280fe 0.7s done
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 9.44MB / 53.17MB 7.7s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 12.58MB / 53.17MB 8.6s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 15.73MB / 53.17MB 9.2s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 18.87MB / 53.17MB 9.8s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 22.02MB / 53.17MB 10.5s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 25.17MB / 53.17MB 10.8s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 28.31MB / 53.17MB 11.2s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 31.46MB / 53.17MB 11.7s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 34.60MB / 53.17MB 12.0s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 37.75MB / 53.17MB 12.4s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 40.89MB / 53.17MB 12.7s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 45.09MB / 53.17MB 13.2s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 48.23MB / 53.17MB 13.6s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 51.38MB / 53.17MB 14.0s
+#4 sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 53.17MB / 53.17MB 14.3s done
+#4 extracting sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b
+#4 extracting sha256:83cc7558c41737fe273044d032b589323a9acd96790bbfd6cf2792647fb88e3b 1.0s done
+#4 DONE 15.5s
+
+#4 [1/2] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:ad0cdd9782db550ca7dde6939a16fd850d04e683d37d3cff79d84a5848ba6a5a
+#4 extracting sha256:7659027a798a9c8fca5bfcbae2d24bd6b7ec65dfe5285d4b7c30c75ca0965299 0.0s done
+#4 extracting sha256:48e51247e7df3167f00ff9972116a308eb551b96eac8382fbf88e82d5866971c 0.0s done
+#4 DONE 15.6s
+
+#6 [2/2] COPY target/cicd-demo-*.jar app.jar
+#6 DONE 0.3s
+
+#7 exporting to image
+#7 exporting layers
+#7 exporting layers 1.1s done
+#7 exporting manifest sha256:7ca22e6fb23f889bf3861161f681d1ff4efae685f46c223146ff1a081f625a9d 0.0s done
+#7 exporting config sha256:f45f6221c7c68dcb25cd8c9dfa153e152eb953f57dc8ac1bba7fd6ae11e6f1a0 0.0s done
+#7 exporting attestation manifest sha256:267987557d2e5d74a25396eed0cc417f5e2627dbb11f2655482244e9441796e7 0.0s done
+#7 exporting manifest list sha256:03ee29fee2c2328e8f81b71b035fda6a1ed9ecc75993203c4079530f4e1ce416
+#7 exporting manifest list sha256:03ee29fee2c2328e8f81b71b035fda6a1ed9ecc75993203c4079530f4e1ce416 0.0s done
+#7 naming to docker.io/library/mi-app:latest done
+#7 unpacking to docker.io/library/mi-app:latest
+#7 unpacking to docker.io/library/mi-app:latest 0.3s done
+#7 DONE 1.5s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Static Analysis (SonarQube))
+[Pipeline] withSonarQubeEnv
+Injecting SonarQube environment variables using the configuration: SonarQube
+[Pipeline] {
+[Pipeline] sh
++ mvn -B sonar:sonar -Dsonar.projectKey=cicd-demo -Dsonar.host.url=http://sonarqube:9000
+[INFO] Scanning for projects...
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/maven/sonar-maven-plugin/3.5.0.1254/sonar-maven-plugin-3.5.0.1254.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/maven/sonar-maven-plugin/3.5.0.1254/sonar-maven-plugin-3.5.0.1254.pom (9.1 kB at 6.4 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/parent/parent/46/parent-46.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/parent/parent/46/parent-46.pom (32 kB at 152 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/maven/sonar-maven-plugin/3.5.0.1254/sonar-maven-plugin-3.5.0.1254.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/maven/sonar-maven-plugin/3.5.0.1254/sonar-maven-plugin-3.5.0.1254.jar (44 kB at 162 kB/s)
+[INFO] 
+[INFO] --------------------< au.com.helderklemp:cicd-demo >--------------------
+[INFO] Building cicd-demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- sonar:3.5.0.1254:sonar (default-cli) @ cicd-demo ---
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.4/plexus-sec-dispatcher-1.4.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.4/plexus-sec-dispatcher-1.4.pom (3.0 kB at 12 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api/2.10.0.1189/sonar-scanner-api-2.10.0.1189.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api/2.10.0.1189/sonar-scanner-api-2.10.0.1189.pom (5.4 kB at 23 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api-parent/2.10.0.1189/sonar-scanner-api-parent-2.10.0.1189.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api-parent/2.10.0.1189/sonar-scanner-api-parent-2.10.0.1189.pom (4.9 kB at 25 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/parent/parent/41/parent-41.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/parent/parent/41/parent-41.pom (31 kB at 127 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.pom (17 kB at 83 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/17/commons-parent-17.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/17/commons-parent-17.pom (31 kB at 146 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.4/plexus-sec-dispatcher-1.4.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.4/plexus-sec-dispatcher-1.4.jar (28 kB at 133 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api/2.10.0.1189/sonar-scanner-api-2.10.0.1189.jar
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/sonarsource/scanner/api/sonar-scanner-api/2.10.0.1189/sonar-scanner-api-2.10.0.1189.jar (582 kB at 885 kB/s)
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar (284 kB at 433 kB/s)
+[INFO] User cache: /var/jenkins_home/.sonar/cache
+[INFO] SonarQube version: 9.9.8.100196
+[INFO] Default locale: "en", source code encoding: "UTF-8"
+[INFO] Load global settings
+[INFO] Load global settings (done) | time=696ms
+[INFO] Server id: 147B411E-AZ3ZhhvwBF9eGTk4yJ5r
+[INFO] User cache: /var/jenkins_home/.sonar/cache
+[INFO] Load/download plugins
+[INFO] Load plugins index
+[INFO] Load plugins index (done) | time=460ms
+[INFO] Load/download plugins (done) | time=1566ms
+[INFO] Process project properties
+[INFO] Process project properties (done) | time=10ms
+[INFO] Execute project builders
+[INFO] Execute project builders (done) | time=2ms
+[INFO] Project key: cicd-demo
+[INFO] Base dir: /var/jenkins_home/workspace/cicd-demo
+[INFO] Working dir: /var/jenkins_home/workspace/cicd-demo/target/sonar
+[INFO] Load project settings for component key: 'cicd-demo'
+[INFO] Auto-configuring with CI 'Jenkins'
+[INFO] Load quality profiles
+[INFO] Load quality profiles (done) | time=163ms
+[INFO] Load active rules
+[INFO] Load active rules (done) | time=3985ms
+[INFO] Load analysis cache
+[INFO] Load analysis cache (404) | time=9ms
+[INFO] Load project repositories
+[INFO] Load project repositories (done) | time=78ms
+[INFO] Indexing files...
+[INFO] Project configuration:
+[INFO] 16 files indexed
+[INFO] 0 files ignored because of scm ignore settings
+[INFO] Quality profile for java: Sonar way
+[INFO] Quality profile for xml: Sonar way
+[INFO] ------------- Run sensors on module cicd-demo
+[INFO] Load metrics repository
+[INFO] Load metrics repository (done) | time=45ms
+[INFO] Sensor JavaSensor [java]
+[INFO] Configured Java source version (sonar.java.source): 10
+[INFO] JavaClasspath initialization
+[INFO] JavaClasspath initialization (done) | time=5ms
+[INFO] JavaTestClasspath initialization
+[INFO] JavaTestClasspath initialization (done) | time=4ms
+[INFO] Server-side caching is enabled. The Java analyzer will not try to leverage data from a previous analysis.
+[INFO] Using ECJ batch to parse 8 Main java source files with batch size 102 KB.
+[INFO] Starting batch processing.
+[INFO] The Java analyzer cannot skip unchanged files in this context. A full analysis is performed for all files.
+[INFO] 100% analyzed
+[INFO] Batch processing: Done.
+[INFO] Did not optimize analysis for any files, performed a full analysis for all 8 files.
+[INFO] Using ECJ batch to parse 7 Test java source files with batch size 102 KB.
+[INFO] Starting batch processing.
+[INFO] 100% analyzed
+[INFO] Batch processing: Done.
+[INFO] Did not optimize analysis for any files, performed a full analysis for all 7 files.
+[INFO] No "Generated" source files to scan.
+[INFO] Sensor JavaSensor [java] (done) | time=2015ms
+[INFO] Sensor JaCoCo XML Report Importer [jacoco]
+[INFO] 'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+[INFO] No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+[INFO] Sensor JaCoCo XML Report Importer [jacoco] (done) | time=1ms
+[INFO] Sensor CSS Rules [javascript]
+[INFO] No CSS, PHP, HTML or VueJS files are found in the project. CSS analysis is skipped.
+[INFO] Sensor CSS Rules [javascript] (done) | time=1ms
+[INFO] Sensor C# Project Type Information [csharp]
+[INFO] Sensor C# Project Type Information [csharp] (done) | time=0ms
+[INFO] Sensor C# Analysis Log [csharp]
+[INFO] Sensor C# Analysis Log [csharp] (done) | time=17ms
+[INFO] Sensor C# Properties [csharp]
+[INFO] Sensor C# Properties [csharp] (done) | time=0ms
+[INFO] Sensor SurefireSensor [java]
+[INFO] parsing [/var/jenkins_home/workspace/cicd-demo/target/surefire-reports]
+[INFO] Sensor SurefireSensor [java] (done) | time=70ms
+[INFO] Sensor HTML [web]
+[INFO] Sensor HTML [web] (done) | time=2ms
+[INFO] Sensor XML Sensor [xml]
+[INFO] 1 source file to be analyzed
+[INFO] 1/1 source file has been analyzed
+[INFO] Sensor XML Sensor [xml] (done) | time=173ms
+[INFO] Sensor TextAndSecretsSensor [text]
+[INFO] 16 source files to be analyzed
+[INFO] 16/16 source files have been analyzed
+[INFO] Sensor TextAndSecretsSensor [text] (done) | time=19ms
+[INFO] Sensor VB.NET Project Type Information [vbnet]
+[INFO] Sensor VB.NET Project Type Information [vbnet] (done) | time=0ms
+[INFO] Sensor VB.NET Analysis Log [vbnet]
+[INFO] Sensor VB.NET Analysis Log [vbnet] (done) | time=8ms
+[INFO] Sensor VB.NET Properties [vbnet]
+[INFO] Sensor VB.NET Properties [vbnet] (done) | time=1ms
+[INFO] Sensor IaC Docker Sensor [iac]
+[INFO] 0 source files to be analyzed
+[INFO] 0/0 source files have been analyzed
+[INFO] Sensor IaC Docker Sensor [iac] (done) | time=39ms
+[INFO] ------------- Run sensors on project
+[INFO] Sensor Analysis Warnings import [csharp]
+[INFO] Sensor Analysis Warnings import [csharp] (done) | time=1ms
+[INFO] Sensor Zero Coverage Sensor
+[INFO] Sensor Zero Coverage Sensor (done) | time=154ms
+[INFO] Sensor Java CPD Block Indexer
+[INFO] Sensor Java CPD Block Indexer (done) | time=13ms
+[INFO] SCM Publisher SCM provider for this project is: git
+[INFO] SCM Publisher 16 source files to be analyzed
+[INFO] SCM Publisher 16/16 source files have been analyzed (done) | time=66ms
+[INFO] CPD Executor 3 files had no CPD blocks
+[INFO] CPD Executor Calculating CPD for 5 files
+[INFO] CPD Executor CPD calculation finished (done) | time=7ms
+[INFO] Analysis report generated in 71ms, dir size=164.9 kB
+[INFO] Analysis report compressed in 23ms, zip size=46.7 kB
+[INFO] Analysis report uploaded in 1040ms
+[INFO] ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=cicd-demo
+[INFO] Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+[INFO] More about the report processing at http://sonarqube:9000/api/ce/task?id=AZ3hsoqsNgc9ftzrmxA7
+[INFO] Analysis total time: 11.013 s
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  19.681 s
+[INFO] Finished at: 2026-05-01T04:01:07Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+[Pipeline] timeout
+Timeout set to expire in 5 min 0 sec
+[Pipeline] {
+[Pipeline] waitForQualityGate
+Checking status of SonarQube task 'AZ3hsoqsNgc9ftzrmxA7' on server 'SonarQube'
+SonarQube task 'AZ3hsoqsNgc9ftzrmxA7' status is 'PENDING'
+SonarQube task 'AZ3hsoqsNgc9ftzrmxA7' status is 'SUCCESS'
+SonarQube task 'AZ3hsoqsNgc9ftzrmxA7' completed. Quality gate is 'OK'
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Container Security Scan (Trivy))
+[Pipeline] sh
++ trivy image --exit-code 1 --severity CRITICAL --no-progress mi-app:latest
+2026-05-01T04:01:16Z	INFO	[vulndb] Need to update DB
+2026-05-01T04:01:16Z	INFO	[vulndb] Downloading vulnerability DB...
+2026-05-01T04:01:16Z	INFO	[vulndb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2026-05-01T04:01:41Z	INFO	[vulndb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2026-05-01T04:01:41Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-05-01T04:01:41Z	INFO	[secret] Secret scanning is enabled
+2026-05-01T04:01:41Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-05-01T04:01:41Z	INFO	[secret] Please see https://trivy.dev/docs/v0.70/guide/scanner/secret#recommendation for faster secret detection
+2026-05-01T04:01:44Z	INFO	[javadb] Downloading Java DB...
+2026-05-01T04:01:44Z	INFO	[javadb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-java-db:1"
+2026-05-01T04:04:44Z	INFO	[javadb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-java-db:1"
+2026-05-01T04:04:44Z	INFO	[javadb] Java DB is cached for 3 days. If you want to update the database more frequently, "trivy clean --java-db" command clears the DB cache.
+2026-05-01T04:04:44Z	INFO	Detected OS	family="alpine" version="3.23.4"
+2026-05-01T04:04:44Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.23" repository="3.23" pkg_num=73
+2026-05-01T04:04:44Z	INFO	Number of language-specific files	num=1
+2026-05-01T04:04:44Z	INFO	[jar] Detecting vulnerabilities...
+2026-05-01T04:04:44Z	INFO	Table result includes only package filenames. Use '--format json' option to get the full path to the package file.
+
+Report Summary
+
+┌───────────────────────────────┬────────┬─────────────────┬─────────┐
+│            Target             │  Type  │ Vulnerabilities │ Secrets │
+├───────────────────────────────┼────────┼─────────────────┼─────────┤
+│ mi-app:latest (alpine 3.23.4) │ alpine │        0        │    -    │
+├───────────────────────────────┼────────┼─────────────────┼─────────┤
+│ app.jar                       │  jar   │       22        │    -    │
+└───────────────────────────────┴────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+For OSS Maintainers: VEX Notice
+--------------------------------
+If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+Learn more and start using VEX: https://trivy.dev/docs/v0.70/guide/supply-chain/vex/repo#publishing-vex-documents
+
+To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+
+
+Java (jar)
+==========
+Total: 22 (CRITICAL: 22)
+
+┌─────────────────────────────────────────────────────────────┬──────────────────┬──────────┬────────┬───────────────────┬──────────────────────────────────────┬─────────────────────────────────────────────────────────────┐
+│                           Library                           │  Vulnerability   │ Severity │ Status │ Installed Version │            Fixed Version             │                            Title                            │
+├─────────────────────────────────────────────────────────────┼──────────────────┼──────────┼────────┼───────────────────┼──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ com.fasterxml.jackson.core:jackson-databind (app.jar)       │ CVE-2018-19360   │ CRITICAL │ fixed  │ 2.9.7             │ 2.9.8, 2.8.11.3, 2.7.9.5             │ jackson-databind: improper polymorphic deserialization in   │
+│                                                             │                  │          │        │                   │                                      │ axis2-transport-jms class                                   │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2018-19360                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2018-19361   │          │        │                   │ 2.7.9.5, 2.9.8, 2.8.11.3             │ jackson-databind: improper polymorphic deserialization in   │
+│                                                             │                  │          │        │                   │                                      │ openjpa class                                               │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2018-19361                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2018-19362   │          │        │                   │ 2.9.8, 2.8.11.3, 2.7.9.5, 2.6.7.3    │ jackson-databind: improper polymorphic deserialization in   │
+│                                                             │                  │          │        │                   │                                      │ jboss-common-core class                                     │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2018-19362                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-14379   │          │        │                   │ 2.9.9.2, 2.8.11.4, 2.7.9.6           │ jackson-databind: default typing mishandling leading to     │
+│                                                             │                  │          │        │                   │                                      │ remote code execution                                       │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-14379                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-14540   │          │        │                   │ 2.9.10, 2.8.11.5, 2.6.7.3            │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ com.zaxxer.hikari.HikariConfig                              │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-14540                  │
+│                                                             ├──────────────────┤          │        │                   │                                      ├─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-16335   │          │        │                   │                                      │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ com.zaxxer.hikari.HikariDataSource                          │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-16335                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-16942   │          │        │                   │ 2.9.10.1, 2.8.11.5, 2.6.7.3          │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ org.apache.commons.dbcp.datasources.*                       │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-16942                  │
+│                                                             ├──────────────────┤          │        │                   │                                      ├─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-16943   │          │        │                   │                                      │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ com.p6spy.engine.spy.P6DataSource                           │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-16943                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-17267   │          │        │                   │ 2.9.10, 2.8.11.5                     │ jackson-databind: Serialization gadgets in classes of the   │
+│                                                             │                  │          │        │                   │                                      │ ehcache package                                             │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-17267                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-17531   │          │        │                   │ 2.9.10.1, 2.8.11.5, 2.6.7.3          │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ org.apache.log4j.receivers.db.*                             │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-17531                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2019-20330   │          │        │                   │ 2.6.7.4, 2.7.9.7, 2.8.11.5, 2.9.10.2 │ jackson-databind: lacks certain net.sf.ehcache blocking     │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2019-20330                  │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2020-8840    │          │        │                   │ 2.6.7.4, 2.7.9.7, 2.8.11.5, 2.9.10.3 │ jackson-databind: Lacks certain xbean-reflect/JNDI blocking │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2020-8840                   │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2020-9546    │          │        │                   │ 2.9.10.4                             │ jackson-databind: Serialization gadgets in                  │
+│                                                             │                  │          │        │                   │                                      │ shaded-hikari-config                                        │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2020-9546                   │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2020-9547    │          │        │                   │ 2.9.10.4, 2.8.11.6, 2.7.9.7          │ jackson-databind: Serialization gadgets in ibatis-sqlmap    │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2020-9547                   │
+│                                                             ├──────────────────┤          │        │                   │                                      ├─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2020-9548    │          │        │                   │                                      │ jackson-databind: Serialization gadgets in anteros-core     │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2020-9548                   │
+├─────────────────────────────────────────────────────────────┼──────────────────┤          │        ├───────────────────┼──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.apache.tomcat.embed:tomcat-embed-core (app.jar)         │ CVE-2020-1938    │          │        │ 9.0.13            │ 9.0.31, 8.5.51, 7.0.100              │ tomcat: Apache Tomcat AJP File Read/Inclusion Vulnerability │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2020-1938                   │
+│                                                             ├──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│                                                             │ CVE-2025-24813   │          │        │                   │ 11.0.3, 10.1.35, 9.0.99              │ tomcat: Potential RCE and/or information disclosure and/or  │
+│                                                             │                  │          │        │                   │                                      │ information corruption with partial PUT...                  │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2025-24813                  │
+├─────────────────────────────────────────────────────────────┼──────────────────┤          │        ├───────────────────┼──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework.boot:spring-boot-actuator-autoconfigure │ CVE-2023-20873   │          │        │ 2.1.1.RELEASE     │ 3.0.6, 2.7.11, 2.6.15, 2.5.15        │ spring-boot: Security Bypass With Wildcard Pattern Matching │
+│ (app.jar)                                                   │                  │          │        │                   │                                      │ on Cloud Foundry                                            │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2023-20873                  │
+├─────────────────────────────────────────────────────────────┼──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework.boot:spring-boot-starter-web (app.jar)  │ CVE-2022-22965   │          │        │                   │ 2.5.12, 2.6.6                        │ spring-framework: RCE via Data Binding on JDK 9+            │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2022-22965                  │
+├─────────────────────────────────────────────────────────────┤                  │          │        ├───────────────────┼──────────────────────────────────────┤                                                             │
+│ org.springframework:spring-beans (app.jar)                  │                  │          │        │ 5.1.3.RELEASE     │ 5.2.20.RELEASE, 5.3.18               │                                                             │
+│                                                             │                  │          │        │                   │                                      │                                                             │
+├─────────────────────────────────────────────────────────────┼──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-web (app.jar)                    │ CVE-2016-1000027 │          │        │                   │ 6.0.0                                │ spring: HttpInvokerServiceExporter readRemoteInvocation     │
+│                                                             │                  │          │        │                   │                                      │ method untrusted java deserialization                       │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2016-1000027                │
+├─────────────────────────────────────────────────────────────┼──────────────────┤          │        │                   ├──────────────────────────────────────┼─────────────────────────────────────────────────────────────┤
+│ org.springframework:spring-webmvc (app.jar)                 │ CVE-2022-22965   │          │        │                   │ 5.2.20.RELEASE, 5.3.18               │ spring-framework: RCE via Data Binding on JDK 9+            │
+│                                                             │                  │          │        │                   │                                      │ https://avd.aquasec.com/nvd/cve-2022-22965                  │
+└─────────────────────────────────────────────────────────────┴──────────────────┴──────────┴────────┴───────────────────┴──────────────────────────────────────┴─────────────────────────────────────────────────────────────┘
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+Stage "Deploy" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+Limpiando workspace...
+[Pipeline] deleteDir
+[Pipeline] echo
+Pipeline FALLO en stage: Declarative: Post Actions
+[Pipeline] sh
++ docker rm -f mi-app
+Error response from daemon: No such container: mi-app
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

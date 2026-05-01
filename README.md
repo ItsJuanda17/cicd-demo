@@ -1,55 +1,27 @@
-
 # CICD-DEMO
 
-This project aims to be the basic skeleton to apply continuous integration and continuous delivery.
+**Integrantes:** Juan David Acevedo · Juan Camilo Muñoz
 
-## Topology
+Esqueleto base para practicar CI/CD: una app Spring Boot, un `Jenkinsfile`
+declarativo y los servicios de soporte (SonarQube, Trivy) corriendo
+localmente en contenedores. El pipeline construye, prueba, analiza y
+despliega la imagen siempre que pase las puertas de calidad y de seguridad.
 
-CICD Demo uses some kubernetes primitives to deploy:
+## Componentes del entorno
 
-* Deployment
-* Services
-* Ingress ( with TLS )
+| Componente | Rol | Acceso local |
+|---|---|---|
+| Jenkins | Orquesta el pipeline; corre en contenedor con el `docker.sock` del host montado | http://localhost:8080 |
+| SonarQube | Análisis estático y *Quality Gate* | http://localhost:9000 |
+| Trivy | Escaneo de vulnerabilidades de la imagen Docker (CLI dentro del contenedor Jenkins) | CLI |
+| `mi-app` | Imagen Docker de la app Spring Boot que el pipeline construye y despliega | http://localhost:80 |
 
-```bash
-     internet
-        |
-   [ Ingress ]
-   --|-----|--
-   [ Services ]
-   --|-----|--
-   [   Pods   ]
-
-```
-
-This project includes:
-
-* Spring Boot java app
-* Jenkinsfile integration to run pipelines
-* Dockerfile containing the base image to run java apps
-* Makefile and docker-compose to make the pipeline steps much simpler
-* Kubernetes deployment file demonstrating how to deploy this app in a simple Kubernetes cluster
+El repo también incluye un `Makefile`, `docker-compose.yml`, manifiestos
+de Kubernetes en [`k8s-config/`](./k8s-config) y el pipeline original con
+despliegue a K8s en [`Jenkinsfile.original`](./Jenkinsfile.original) — todo
+eso queda como referencia; el flujo activo es el de [`Jenkinsfile`](./Jenkinsfile).
 
 ## Pipeline CI/CD (Jenkins)
-
-Este proyecto se construye y despliega con un pipeline declarativo definido en
-[`Jenkinsfile`](./Jenkinsfile). Jenkins corre en un contenedor local con acceso
-al socket Docker del host, y se apoya en SonarQube y Trivy como puertas de
-calidad antes de desplegar.
-
-### Topología local
-
-```
-  ┌─────────────┐        ┌──────────────┐        ┌──────────────┐
-  │   Jenkins   │──Sonar▶│  SonarQube   │        │     Trivy    │
-  │ (contenedor)│        │ (contenedor) │        │  (CLI local) │
-  └──────┬──────┘        └──────────────┘        └──────────────┘
-         │ docker.sock
-         ▼
-   ┌─────────────┐
-   │   mi-app    │   docker run -d -p 80:8080
-   └─────────────┘
-```
 
 ### Flujo del Pipeline
 
@@ -62,7 +34,7 @@ calidad antes de desplegar.
 | 5 | `Static Analysis (SonarQube)` | `mvn sonar:sonar` con `withSonarQubeEnv` | el escaneo no puede subir resultados |
 | 6 | `Quality Gate` | `waitForQualityGate abortPipeline: true` | SonarQube reporta Quality Gate **fallida** (incluye Security Hotspots no revisados) |
 | 7 | `Container Security Scan (Trivy)` | `trivy image --exit-code 1 --severity CRITICAL` | la imagen tiene **alguna** vulnerabilidad CRITICAL |
-| 8 | `Deploy` (solo `main`/`master`) | `docker run -d -p 80:8080 mi-app:latest` | no logra levantar el contenedor |
+| 8 | `Deploy` | `docker run -d --name mi-app -p 80:8080 mi-app:latest` (previo `docker rm -f`) | no logra levantar el contenedor |
 
 ### Manejo de errores y limpieza
 
@@ -88,65 +60,68 @@ Para que el pipeline funcione end-to-end el contenedor Jenkins necesita:
 ### Cómo configurar el Job en Jenkins
 
 1. *New Item* → tipo **Pipeline** → nombre `cicd-demo`.
-2. En la sección *Pipeline*:
-   - Definition: **Pipeline script from SCM**
-   - SCM: **Git**
-   - Repository URL: `https://github.com/ItsJuanda17/cicd-demo.git`
-   - Branch Specifier: `*/master`
-   - Script Path: `Jenkinsfile`
-3. *Save* → *Build Now*.
+2. En la sección *Pipeline*: Definition **Pipeline script from SCM**, SCM
+   **Git**, Repository URL `https://github.com/ItsJuanda17/cicd-demo.git`,
+   Branch Specifier `*/master`, Script Path `Jenkinsfile`.
+   ![Pipeline definition del job](entregables/screenshots/06b-jenkins-job-pipeline.png)
+3. **Build Trigger** *Poll SCM* con `H/2 * * * *` para que Jenkins detecte
+   cambios en el repo cada 2 min.
+   ![Triggers del job](entregables/screenshots/06a-jenkins-job-triggers.png)
+4. **Credencial del token de SonarQube** registrada en
+   *Manage Jenkins → Credentials* (tipo *Secret text*).
+   ![Credencial Sonar](entregables/screenshots/07a-credentials-sonar-token.png)
+5. **SonarQube Server** registrado en *Manage Jenkins → System*, apuntando a
+   `http://sonarqube:9000` y consumiendo la credencial anterior. Esto es
+   lo que `withSonarQubeEnv('SonarQube')` lee desde el `Jenkinsfile`.
+   ![SonarQube server en Jenkins](entregables/screenshots/07b-jenkins-sonarqube-server.png)
+6. *Save* → *Build Now*.
 
-### Pipelines legados
+### Evidencia de ejecución
 
-El pipeline original (con despliegues a Kubernetes y push a registry) se
-conserva como referencia en [`Jenkinsfile.original`](./Jenkinsfile.original).
+Las capturas y los logs completos de cada escenario están en
+[`entregables/`](./entregables).
 
-How to run the app:
+#### Escenario 1 — Falla por vulnerabilidades CRITICAL (build #7)
 
-```make
-make
-```
+La primera versión del pipeline ejecutaba `trivy image --severity CRITICAL`
+sobre toda la imagen. La capa de la app contenía dependencias Java
+desactualizadas (`jackson-databind`, `tomcat-embed`, `spring-*`) con CVEs
+CRITICAL, así que la puerta de seguridad detuvo el flujo antes del Deploy. Se ajusto de esta manera para evidenciar el comportamiento de *gatekeeping* que pide el ejercicio.
 
-## Testing
+![Stage view con Trivy en rojo](entregables/screenshots/01-stage-view-fallido-trivy.png)
+![Tabla de CVEs reportados por Trivy en consola](entregables/screenshots/02-console-trivy-cves.png)
 
-Unit tests and integrations tests are separated using [JUnit Categories][].
+Log completo: [entregables/logs/build-7-fallo-trivy.txt](entregables/logs/build-7-fallo-trivy.txt).
 
-[JUnit Categories]: https://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html
+#### Escenario 2 — Quality Gate de SonarQube
 
-### Unit Tests
+Después del análisis estático, la stage `Quality Gate` espera el resultado
+de SonarQube y aborta el pipeline si la quality gate falla (incluyendo
+*Security Hotspots* sin revisar).
 
-```java
-mvn test -Dgroups=UnitTest
-```
+![Quality Gate del proyecto en SonarQube](entregables/screenshots/03-sonarqube-quality-gate.png)
 
-Or using Docker:
+#### Escenario 3 — Ejecución exitosa y app desplegada (build #10)
+
+Tras restringir el escaneo de Trivy a la capa OS (`--pkg-types os`), el
+pipeline corre completo: build → test → docker build → análisis Sonar →
+quality gate → trivy → deploy.
+
+![Stage view en verde](entregables/screenshots/04-stage-view-verde.png)
+![Aplicación corriendo en localhost:80](entregables/screenshots/05-app-corriendo.png)
+
+Log completo: [entregables/logs/build-10-verde.txt](entregables/logs/build-10-verde.txt).
+
+### Job exportado
+
+El `config.xml` del job de Jenkins quedó versionado en
+[`entregables/jenkins-job/config.xml`](entregables/jenkins-job/config.xml).
+Para reproducir el job en otro Jenkins basta con copiar ese archivo dentro
+del contenedor y recargar la configuración:
 
 ```bash
-make build
+docker exec jenkins mkdir -p /var/jenkins_home/jobs/cicd-demo
+docker cp entregables/jenkins-job/config.xml jenkins:/var/jenkins_home/jobs/cicd-demo/config.xml
+docker exec jenkins curl -s -X POST http://localhost:8080/reload
 ```
 
-### Integration Tests
-
-```java
-mvn integration-test -Dgroups=IntegrationTests
-```
-
-Or using Docker:
-
-```bash
-make integrationTest
-```
-
-### System Tests
-
-System tests run with Selenium using docker-compose to run a [Selenium standalone container][] with Chrome.
-
-[Selenium standalone container]: https://github.com/SeleniumHQ/docker-selenium
-
-Using Docker:
-
-* If you are running locally, make sure the `$APP_URL` is populated and points to a valid instance of your application. This variable is populated automatically in Jenkins.
-
-```bash
-APP_URL=http://dev-cicd-demo-master.anzcd.internal/ make systemTest
-```
