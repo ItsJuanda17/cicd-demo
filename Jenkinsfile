@@ -61,9 +61,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            when {
-                anyOf { branch 'main'; branch 'master' }
-            }
             steps {
                 sh "docker rm -f ${IMAGE_NAME} || true"
                 sh "docker run -d --name ${IMAGE_NAME} -p ${APP_HOST_PORT}:8080 ${IMAGE_NAME}:${IMAGE_TAG}"
@@ -80,7 +77,7 @@ pipeline {
             echo "Pipeline FALLO en stage: ${env.STAGE_NAME}"
             sh "docker rm -f ${IMAGE_NAME} || true"
         }
-        always {
+        cleanup {
             echo 'Limpiando workspace...'
             deleteDir()
         }
