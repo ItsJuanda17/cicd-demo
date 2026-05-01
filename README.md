@@ -28,10 +28,10 @@ eso queda como referencia; el flujo activo es el de [`Jenkinsfile`](./Jenkinsfil
 | # | Stage | Acción | Falla si... |
 |---|---|---|---|
 | 1 | `Checkout` | Clona el repo desde el SCM configurado en el job | el clon falla |
-| 2 | `Build` | `./mvnw -DskipTests clean package` | la compilación o el packaging fallan |
-| 3 | `Test` | `./mvnw test` y publica reportes JUnit | algún test unitario falla |
+| 2 | `Build` | `mvn -B -DskipTests clean package` | la compilación o el packaging fallan |
+| 3 | `Test` | `mvn -B test` y publica reportes JUnit | algún test unitario falla |
 | 4 | `Docker Build` | `docker build -t mi-app:latest .` | el build de imagen falla |
-| 5 | `Static Analysis (SonarQube)` | `mvn sonar:sonar` con `withSonarQubeEnv` | el escaneo no puede subir resultados |
+| 5 | `Static Analysis (SonarQube)` | `mvn -B sonar:sonar` con `withSonarQubeEnv` | el escaneo no puede subir resultados |
 | 6 | `Quality Gate` | `waitForQualityGate abortPipeline: true` | SonarQube reporta Quality Gate **fallida** (incluye Security Hotspots no revisados) |
 | 7 | `Container Security Scan (Trivy)` | `trivy image --exit-code 1 --severity CRITICAL` | la imagen tiene **alguna** vulnerabilidad CRITICAL |
 | 8 | `Deploy` | `docker run -d --name mi-app -p 80:8080 mi-app:latest` (previo `docker rm -f`) | no logra levantar el contenedor |
@@ -111,6 +111,88 @@ quality gate → trivy → deploy.
 ![Aplicación corriendo en localhost:80](entregables/screenshots/05-app-corriendo.png)
 
 Log completo: [entregables/logs/build-10-verde.txt](entregables/logs/build-10-verde.txt).
+
+## Ejecutar la app localmente
+
+### Opción 1: Compilar y ejecutar sin contenedores (desarrollo local)
+
+**Requisitos previos:**
+
+**Pasos:**
+
+```bash
+# Compilar la aplicación
+mvn clean package
+
+# Ejecutar la app
+java -jar target/cicd-demo-1.0-SNAPSHOT.jar
+```
+
+La app estará disponible en `http://localhost:8080`.
+
+Endpoints disponibles:
+- `GET http://localhost:8080/` — información básica del entorno (hostname, IP, OS)
+- `GET http://localhost:8080/users` — lista de usuarios
+- `GET http://localhost:8080/users/{id}` — obtener usuario por `id`
+- `POST http://localhost:8080/users` — crear un usuario (body JSON)
+- `GET http://localhost:8080/actuator/health` — estado de la app (actuator)
+- `GET http://localhost:8080/config` — configuración (property `application.name`)
+
+### Opción 2: Ejecutar con Docker (sin Jenkins)
+
+**Requisitos previos:**
+- Docker 20.10+
+- Maven 3.6+ (para compilar)
+
+**Pasos:**
+
+```bash
+# 1. Compilar la app
+mvn clean package
+
+# 2. Construir imagen Docker
+docker build -t mi-app:latest .
+
+# 3. Ejecutar el contenedor
+docker run -d --name mi-app -p 8080:8080 mi-app:latest
+
+# 4. Verificar que está corriendo
+curl http://localhost:8080/actuator/health
+
+# 5. Para detener
+docker stop mi-app
+docker rm mi-app
+```
+
+### Opción 3: Stack completo con docker-compose (Jenkins + SonarQube + App)
+
+**Requisitos previos:**
+- Docker 20.10+
+- Docker Compose 2.0+
+
+**Pasos:**
+
+```bash
+# 1. Levantar todos los servicios
+docker-compose up -d
+
+# 2. Acceder a los servicios
+# - Jenkins: http://localhost:8080 (espera a que inicialice, puede tardar 30s-1min)
+# - SonarQube: http://localhost:9000
+# - App (después del primer build): http://localhost:80
+
+# 3. Ver logs
+docker-compose logs -f jenkins
+
+# 4. Detener servicios
+docker-compose down
+
+# 5. Detener y eliminar volúmenes (limpieza completa)
+docker-compose down -v
+```
+
+**Nota:** La primera vez que se levanta el docker-compose, Jenkins demorará en inicializar.
+Consulta los logs con `docker-compose logs jenkins` para seguir el progreso.
 
 ### Job exportado
 
