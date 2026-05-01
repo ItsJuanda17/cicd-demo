@@ -4,9 +4,14 @@ pipeline {
     environment {
         IMAGE_NAME = 'mi-app'
         IMAGE_TAG  = 'latest'
-        SONAR_KEY  = 'my-app'
+        SONAR_KEY  = 'cicd-demo'
         SONAR_HOST = 'http://sonarqube:9000'
-        APP_PORT   = '8081'
+        APP_HOST_PORT = '80'
+    }
+
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
     }
 
     stages {
@@ -16,10 +21,16 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Build') {
             steps {
                 sh 'chmod +x mvnw'
-                sh './mvnw -B clean package'
+                sh './mvnw -B -DskipTests clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh './mvnw -B test'
             }
             post {
                 always {
@@ -28,16 +39,31 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+
         stage('Static Analysis (SonarQube)') {
             steps {
-                sh "./mvnw -B sonar:sonar -Dsonar.projectKey=${SONAR_KEY} -Dsonar.host.url=${SONAR_HOST}"
+                withSonarQubeEnv('SonarQube') {
+                    sh "./mvnw -B sonar:sonar -Dsonar.projectKey=${SONAR_KEY} -Dsonar.host.url=${SONAR_HOST}"
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
         stage('Container Security Scan (Trivy)') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                sh "trivy image --exit-code 0 ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "trivy image --exit-code 1 --severity CRITICAL --no-progress ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
 
@@ -47,17 +73,22 @@ pipeline {
             }
             steps {
                 sh "docker rm -f ${IMAGE_NAME} || true"
-                sh "docker run -d --name ${IMAGE_NAME} -p ${APP_PORT}:8080 ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker run -d --name ${IMAGE_NAME} -p ${APP_HOST_PORT}:8080 ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
     }
 
     post {
         success {
+            echo "Pipeline OK — imagen ${IMAGE_NAME}:${IMAGE_TAG} desplegada en :${APP_HOST_PORT}"
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, allowEmptyArchive: true
         }
+        failure {
+            echo "Pipeline FALLO en stage: ${env.STAGE_NAME}"
+            sh "docker rm -f ${IMAGE_NAME} || true"
+        }
         always {
-            echo 'Limpiando entorno...'
+            echo 'Limpiando workspace...'
             cleanWs()
         }
     }
